@@ -15,7 +15,7 @@
         <!-- Assume test is the database name -->
 
         <property name = "hibernate.connection.url">
-            jdbc:mysql://localhost/employees_simple?createDatabaseIfNotExist=true
+            jdbc:mysql://localhost/library?createDatabaseIfNotExist=true
         </property>
 
         <property name = "hibernate.connection.username">
@@ -30,9 +30,9 @@
         <!-- List of XML mappings -->
         <mapping class="com.tkaczu.hibernate.library.model.Books"/>
         <mapping class="com.tkaczu.hibernate.library.model.Author"/>
-        <mapping class="com.tkaczu.hibernate.library.model.Issue"/>
         <mapping class="com.tkaczu.hibernate.library.model.Kinds"/>
         <mapping class="com.tkaczu.hibernate.library.model.Publisher"/>
+        <mapping class="com.tkaczu.hibernate.library.model.Issue"/>
 
     </session-factory>
 </hibernate-configuration>
