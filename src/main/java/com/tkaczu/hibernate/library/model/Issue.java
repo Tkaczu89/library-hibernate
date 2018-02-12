@@ -25,7 +25,8 @@ public class Issue {
     @Column(name = "issue_date")
     public Date issueDate;
 
-    public Issue(Integer issueNo, Date issueDate) {
+    public Issue(Integer issueNo, Date issueDate,Publisher publisher) {
+        this.publisher = publisher;
         this.issueNo = issueNo;
         this.issueDate = issueDate;
     }
@@ -45,5 +46,21 @@ public class Issue {
 
     public void setIssueDate(Date issueDate) {
         this.issueDate = issueDate;
+    }
+
+    public Integer getIssueId() {
+        return issueId;
+    }
+
+    public void setIssueId(Integer issueId) {
+        this.issueId = issueId;
+    }
+
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
     }
 }

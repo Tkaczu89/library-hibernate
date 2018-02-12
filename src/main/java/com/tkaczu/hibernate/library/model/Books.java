@@ -34,7 +34,7 @@ public class Books {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @JoinColumn(name = "issue_no")
+    @JoinColumn(name = "issue_id")
     public Issue issue;
 
     @Column(name = "book_title")

@@ -12,7 +12,8 @@ public class Main {
     public static void main(String[] args) {
         Author author = new Author("Magdalena", "Nowak");
         Kinds kind = new Kinds("Horror");
-        Issue issue = new Issue(2, Date.valueOf("2015-12-02"));
+        Publisher publisher = new Publisher("Arkady","Warszawa");
+        Issue issue = new Issue(2, Date.valueOf("2015-12-02"),publisher);
         addBook(author, kind, issue, "Orki z Majorki");
 
     }
@@ -51,12 +52,12 @@ public class Main {
         }
     }
 
-    private static void addPublisher(String pubName, String pubLocation) {
+    /*private static void addPublisher(String pubName, String pubLocation) {
         Transaction trans = null;
         try (SessionFactory factory = new Configuration().configure().buildSessionFactory()) {
             try (Session session = factory.openSession()) {
                 trans = session.beginTransaction();
-                Publisher publisher = new Publisher(pubName, pubLocation);
+                Publisher publisher = new Publisher(2,pubName, pubLocation);
                 session.save(publisher);
                 trans.commit();
             } catch (RuntimeException ex) {
@@ -66,6 +67,6 @@ public class Main {
                 throw ex;
             }
         }
-    }
+    }*/
 
 }

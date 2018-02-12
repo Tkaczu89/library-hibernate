@@ -10,7 +10,7 @@ public class Publisher {
 
     @Id
     @GeneratedValue
-    @Column(name = "publisher_id")
+    @Column(name = "publisher_id",unique = true)
     public long pubId;
 
     @Column(name = "name")
