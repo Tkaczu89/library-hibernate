@@ -7,14 +7,14 @@ import java.util.List;
 public class Kinds {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "kind_id")
     private Integer kindId;
 
-    @Column(name = "kind")
+    @Column(name = "kind", unique = true)
     private String kind;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "book_kinds",
             joinColumns = {@JoinColumn(name = "kind_id")},
             inverseJoinColumns = {@JoinColumn(name = "books_id")})

@@ -19,7 +19,7 @@ public class Main {
             try (Session session = factory.openSession()) {
                 trans = session.beginTransaction();
 
-                 Author tolkien = new Author("John", "Tolkien");
+                Author tolkien = new Author("John", "Tolkien");
                 Author rowling = new Author("Joanne", "Rowling");
 
                 Kinds fantasy = new Kinds("Fantstyka");
@@ -29,68 +29,75 @@ public class Main {
                 Kinds thriller = new Kinds("Thriller");
                 Kinds comedy = new Kinds("Komedia");
 
-                List<Kinds> lotrKinds = new LinkedList<>();
-                List<Kinds> harryKinds = new LinkedList<>();
-
-                lotrKinds.add(fantasy);
-                lotrKinds.add(thriller);
-                lotrKinds.add(adventureNovel);
-
-                harryKinds.add(fantasy);
-                harryKinds.add(adventureNovel);
-                harryKinds.add(comedy);
+                List<Books> fantasyBooks = new LinkedList<>();
+                List<Books> comedyBooks = new LinkedList<>();
+                List<Books> thrillerBooks = new LinkedList<>();
+                List<Books> adventureNovelBooks = new LinkedList<>();
 
                 Books book1 = new Books("Wladca Pierscieni: Druzyna pierscienia");
-                book1.setAuthor(tolkien);
-                book1.setKinds(lotrKinds);
                 Books book2 = new Books("Wladca Pierscieni: Powrot krola");
-                book2.setAuthor(tolkien);
-                book2.setKinds(lotrKinds);
                 Books book3 = new Books("Harry Potter i kamien filozoficzny");
+
+                fantasyBooks.add(book1);
+                fantasyBooks.add(book2);
+                fantasyBooks.add(book3);
+                comedyBooks.add(book3);
+                thrillerBooks.add(book1);
+                thrillerBooks.add(book2);
+                adventureNovelBooks.add(book1);
+                adventureNovelBooks.add(book2);
+                adventureNovelBooks.add(book3);
+
+
+                fantasy.setBooks(fantasyBooks);
+                comedy.setBooks(comedyBooks);
+                thriller.setBooks(thrillerBooks);
+                adventureNovel.setBooks(adventureNovelBooks);
+
+                book1.setAuthor(tolkien);
+                book2.setAuthor(tolkien);
                 book3.setAuthor(rowling);
-                book3.setKinds(harryKinds);
-
-
-                List<Author> authorsList = session.createQuery("FROM Author").getResultList();
-
-                if (!authorsList.contains(tolkien)) {
-                    session.save(tolkien);
-                }
-                if (!authorsList.contains(tolkien)) {
-                    session.save(rowling);
-                }
-
-                List<Kinds> kindsList = session.createQuery("FROM Kinds").getResultList();
-                if (!kindsList.contains(fantasy)) {
-                    session.save(fantasy);
-                }
-                if (!kindsList.contains(drama)) {
-                    session.save(drama);
-                }
-
-                if (!kindsList.contains(horror)) {
-                    session.save(horror);
-                }
-
-                if (!kindsList.contains(adventureNovel)) {
-                    session.save(adventureNovel);
-                }
-
-                if (!kindsList.contains(thriller)) {
-                    session.save(thriller);
-                }
-
-                if (!kindsList.contains(comedy)) {
-                    session.save(comedy);
-                }
 
                 session.save(book1);
                 session.save(book2);
                 session.save(book3);
+                session.save(tolkien);
+                session.save(rowling);
+                session.save(fantasy);
+                session.save(drama);
+                session.save(horror);
+                session.save(adventureNovel);
+                session.save(thriller);
+                session.save(comedy);
+
                 trans.commit();
+            } catch (RuntimeException ex) {
+                if (trans != null) {
+                    trans.rollback();
+                }
+                throw ex;
             }
         }
 
+
+    }
+
+    private static void addBook(String title, Author author, Kinds kind) {
+        Transaction trans = null;
+        try (SessionFactory factory = new Configuration().configure().buildSessionFactory()) {
+            try (Session session = factory.openSession()) {
+                trans = session.beginTransaction();
+                Books book = new Books(title);
+
+
+                trans.commit();
+            } catch (RuntimeException ex) {
+                if (trans != null) {
+                    trans.rollback();
+                }
+                throw ex;
+            }
+        }
 
     }
 }
@@ -129,21 +136,3 @@ public class Main {
         }
     }
 
-    *//*private static void addPublisher(String pubName, String pubLocation) {
-        Transaction trans = null;
-        try (SessionFactory factory = new Configuration().configure().buildSessionFactory()) {
-            try (Session session = factory.openSession()) {
-                trans = session.beginTransaction();
-                Publisher publisher = new Publisher(2,pubName, pubLocation);
-                session.save(publisher);
-                trans.commit();
-            } catch (RuntimeException ex) {
-                if (trans != null) {
-                    trans.rollback();
-                }
-                throw ex;
-            }
-        }
-    }*//*
-
-}*/
