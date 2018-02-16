@@ -1,58 +1,42 @@
 package com.tkaczu.hibernate.library.model;
 
 
-import org.hibernate.annotations.Cascade;
-
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "books")
 public class Books {
 
     @Id
-    @GeneratedValue
-    @Column(name = "book_id", unique = true)
-    public long bookId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "book_id")
+    private long book_id;
 
-    /*@ManyToMany(cascade=CascadeType.ALL)
-    @JoinTable(name="books_author",
-            joinColumns = {@JoinColumn(name="author_id")},
-            inverseJoinColumns = {@JoinColumn(name="book_id")})
-    private Set<Books> books = new HashSet<>();*/
+    @Column(name = "title")
+    private String bookTitle;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @JoinColumn(name = "author_id")
-    public Author author;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "authors_id")
+    private Author author;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @JoinColumn(name = "kind_id")
-    public Kinds kinds;
+    @ManyToMany(mappedBy = "books", cascade = CascadeType.ALL)
+    private List<Kinds> kinds;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @JoinColumn(name = "issue_id")
-    public Issue issue;
 
-    @Column(name = "book_title")
-    public String bookTitle;
+    public Books() {
+    }
 
-    public Books(Author author, Kinds kinds, Issue issue, String bookTitle) {
-        this.author = author;
-        this.kinds = kinds;
-        this.issue = issue;
+    public Books(String bookTitle) {
         this.bookTitle = bookTitle;
     }
 
-    public long getBookId() {
-        return bookId;
+    public long getBook_id() {
+        return book_id;
     }
 
-    public void setBookId(long bookId) {
-        this.bookId = bookId;
+    public void setBook_id(long book_id) {
+        this.book_id = book_id;
     }
 
     public String getBookTitle() {
@@ -61,5 +45,21 @@ public class Books {
 
     public void setBookTitle(String bookTitle) {
         this.bookTitle = bookTitle;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public List<Kinds> getKinds() {
+        return kinds;
+    }
+
+    public void setKinds(List<Kinds> kinds) {
+        this.kinds = kinds;
     }
 }

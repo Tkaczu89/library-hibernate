@@ -1,40 +1,69 @@
 package com.tkaczu.hibernate.library.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "kinds")
-
-
 public class Kinds {
 
     @Id
-    @GeneratedValue
-    @Column(name = "kind_id", unique = true)
-    public long kindId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "kind_id")
+    private Integer kindId;
+
+    @Column(name = "kind")
+    private String kind;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "book_kinds",
+            joinColumns = {@JoinColumn(name = "kind_id")},
+            inverseJoinColumns = {@JoinColumn(name = "books_id")})
+    private List<Books> books;
 
 
-    @Column(name = "kind_name")
-    public String kindName;
-
-    public Kinds(String kindName) {
-        this.kindName = kindName;
+    public Kinds() {
     }
 
-    public long getKindId() {
+    public Kinds(String kind) {
+        this.kind = kind;
+    }
+
+    public Integer getKindId() {
         return kindId;
     }
 
-    public void setKindId(long kindId) {
+    public void setKindId(Integer kindId) {
         this.kindId = kindId;
     }
 
-    public String getKindName() {
-        return kindName;
+    public String getKind() {
+        return kind;
     }
 
-    public void setKindName(String kindName) {
-        this.kindName = kindName;
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public List<Books> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Books> books) {
+        this.books = books;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Kinds kinds = (Kinds) o;
+
+        return kind != null ? kind.equals(kinds.kind) : kinds.kind == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return kind != null ? kind.hashCode() : 0;
     }
 }
-
