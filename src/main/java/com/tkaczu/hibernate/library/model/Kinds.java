@@ -15,9 +15,6 @@ public class Kinds {
     private String kind;
 
     @ManyToMany
-    @JoinTable(name = "book_kinds",
-            joinColumns = {@JoinColumn(name = "kind_id")},
-            inverseJoinColumns = {@JoinColumn(name = "books_id")})
     private List<Books> books;
 
 
@@ -52,18 +49,4 @@ public class Kinds {
         this.books = books;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Kinds kinds = (Kinds) o;
-
-        return kind != null ? kind.equals(kinds.kind) : kinds.kind == null;
-    }
-
-    @Override
-    public int hashCode() {
-        return kind != null ? kind.hashCode() : 0;
-    }
 }

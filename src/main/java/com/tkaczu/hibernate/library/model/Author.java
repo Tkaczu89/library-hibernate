@@ -1,40 +1,48 @@
 package com.tkaczu.hibernate.library.model;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "author", uniqueConstraints = {@UniqueConstraint(columnNames = {"first_name", "last_name"})})
+@Table(name = "authors", uniqueConstraints = {@UniqueConstraint(columnNames = {"first_name", "last_name"})})
 
 public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "author_id")
-    private long authorId;
+    private Integer authorId;
 
-    @Column(name = "first_name", unique = true)
+    @Column(name = "first_name", unique = true, nullable = false)
     private String firstName;
 
-    @Column(name = "last_name", unique = true)
+    @Column(name = "last_name", unique = true, nullable = false)
     private String lastName;
 
-    @OneToMany(mappedBy = "author")
-    private List<Books> books;
+    @Column(name = "nick")
+    private String nick;
+
+    @ManyToMany(mappedBy = "authors")
+    @JoinTable(name = "authors_books",
+            joinColumns = {@JoinColumn(name = "author_id", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "book_id", nullable = false)})
+    private Set<Books> books = new HashSet<>();
 
     public Author() {
     }
 
-    public Author(String firstName, String lastName) {
+    public Author(String firstName, String lastName, String nick) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.nick = nick;
     }
 
     public long getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(long authorId) {
+    public void setAuthorId(Integer authorId) {
         this.authorId = authorId;
     }
 
@@ -54,29 +62,20 @@ public class Author {
         this.lastName = lastName;
     }
 
-    public List<Books> getBooks() {
+    public String getNick() {
+        return nick;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+
+    public Set<Books> getBooks() {
         return books;
     }
 
-    public void setBooks(List<Books> books) {
+    public void setBooks(Set<Books> books) {
         this.books = books;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Author author = (Author) o;
-
-        if (firstName != null ? !firstName.equals(author.firstName) : author.firstName != null) return false;
-        return lastName != null ? lastName.equals(author.lastName) : author.lastName == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = firstName != null ? firstName.hashCode() : 0;
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        return result;
-    }
 }
