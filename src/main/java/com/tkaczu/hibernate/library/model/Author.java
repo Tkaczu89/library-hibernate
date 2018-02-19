@@ -1,11 +1,13 @@
 package com.tkaczu.hibernate.library.model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "authors", uniqueConstraints = {@UniqueConstraint(columnNames = {"first_name", "last_name"})})
+@Table(name = "authors", uniqueConstraints = {@UniqueConstraint(columnNames = {"first_name", "last_name", "nick"})})
 
 public class Author {
 
@@ -14,16 +16,17 @@ public class Author {
     @Column(name = "author_id")
     private Integer authorId;
 
-    @Column(name = "first_name", unique = true, nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name", unique = true, nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
     @Column(name = "nick")
     private String nick;
 
-    @ManyToMany(mappedBy = "authors")
+    @ManyToMany
+    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinTable(name = "authors_books",
             joinColumns = {@JoinColumn(name = "author_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "book_id", nullable = false)})
@@ -77,5 +80,7 @@ public class Author {
     public void setBooks(Set<Books> books) {
         this.books = books;
     }
+
+
 
 }

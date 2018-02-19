@@ -1,9 +1,9 @@
 package com.tkaczu.hibernate.library.model;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+
+@Entity
+@Table(name = "publishers")
 
 public class Publisher {
 
@@ -12,7 +12,7 @@ public class Publisher {
     @Column(name = "publisher_id")
     private Integer publisherId;
 
-    @Column(name = "publisher_name")
+    @Column(name = "publisher_name", unique = true, nullable = false)
     private String name;
 
     @Column(name = "publication_location")
@@ -21,9 +21,9 @@ public class Publisher {
     public Publisher() {
     }
 
-    public Publisher(String name, String lcoation) {
+    public Publisher(String name, String location) {
         this.name = name;
-        this.location = lcoation;
+        this.location = location;
     }
 
     public Integer getPublisherId() {

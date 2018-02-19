@@ -1,9 +1,10 @@
 package com.tkaczu.hibernate.library.model;
 
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,29 +16,33 @@ public class Books {
     @Column(name = "book_id")
     private Integer book_id;
 
-    @Column(name = "title")
-    private String bookTitle;
+    @Column(name = "title", nullable = false)
+    private String title;
 
     @ManyToMany(mappedBy = "books")
+    @Cascade(value = org.hibernate.annotations.CascadeType.ALL)
     private Set<Author> authors = new HashSet<>();
 
-
+    @OneToMany(mappedBy = "books")
+    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private Set<Edition> editions = new HashSet<>();
 
 
-    @ManyToMany(mappedBy = "books", cascade = CascadeType.ALL)
-    @JoinTable(name = "book_kinds",
-            joinColumns = {@JoinColumn(name = "book_id")},
-            inverseJoinColumns = {@JoinColumn(name = "kinds_id")})
-    private List<Kinds> kinds;
+    @ManyToMany
+    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @JoinTable(name = "books_kinds",
+            joinColumns = {@JoinColumn(name = "book_id", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "kind_id", nullable = false)})
+    private Set<Kinds> kinds = new HashSet<>();
 
 
     public Books() {
     }
 
-    public Books(String bookTitle, Set<Author> authors) {
-        this.bookTitle = bookTitle;
-        this.authors = authors;
+    public Books(String title, Set<Author> authors, Set<Kinds> kinds) {
+        this.title = title;
+        authors.forEach(this::addAuthor);
+        kinds.forEach(this::addKind);
     }
 
     public long getBook_id() {
@@ -48,12 +53,12 @@ public class Books {
         this.book_id = book_id;
     }
 
-    public String getBookTitle() {
-        return bookTitle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setBookTitle(String bookTitle) {
-        this.bookTitle = bookTitle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Set<Author> getAuthors() {
@@ -72,11 +77,27 @@ public class Books {
         this.authors = authors;
     }
 
-    public List<Kinds> getKinds() {
+    public Set<Kinds> getKinds() {
         return kinds;
     }
 
-    public void setKinds(List<Kinds> kinds) {
+    public void setKinds(Set<Kinds> kinds) {
         this.kinds = kinds;
+    }
+
+    public void addAuthor(Author author) {
+        authors.add(author);
+        author.getBooks().add(this);
+    }
+
+    public void addKind(Kinds kind) {
+        kinds.add(kind);
+        kind.getBooks().add(this);
+    }
+
+    public static Books newEdition(String title, Set<Author> authors,Set<Kinds> kinds, Publisher publisher,Integer editionNumber) {
+        Books book = new Books (title,authors,kinds);
+        book.getEditions().add(new Edition(editionNumber,book,publisher));
+        return book;
     }
 }

@@ -31,8 +31,8 @@
         <mapping class="com.tkaczu.hibernate.library.model.Books"/>
         <mapping class="com.tkaczu.hibernate.library.model.Author"/>
         <mapping class="com.tkaczu.hibernate.library.model.Kinds"/>
-        <!--<mapping class="com.tkaczu.hibernate.library.model.Publisher"/>
-        <mapping class="com.tkaczu.hibernate.library.model.Issue"/>-->
+        <mapping class="com.tkaczu.hibernate.library.model.Publisher"/>
+        <mapping class="com.tkaczu.hibernate.library.model.Edition"/>
 
     </session-factory>
 </hibernate-configuration>

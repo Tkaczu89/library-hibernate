@@ -1,11 +1,12 @@
 package com.tkaczu.hibernate.library.model;
 
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.annotations.Cascade;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "editions")
 public class Edition {
 
     @Id
@@ -13,20 +14,25 @@ public class Edition {
     @Column(name = "edition_id")
     private Integer editionId;
 
-    @Column(name = "edition_number")
+    @Column(name = "edition_number",nullable = false)
     private Integer number;
 
+    @ManyToOne
+    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = "book_id")
+    private Books books;
 
-    private Books book;
-
+    @ManyToOne
+    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = "publisher_id")
     private Publisher publisher;
 
     public Edition() {
     }
 
-    public Edition(Integer number, Books book, Publisher publisher) {
+    public Edition(Integer number, Books books, Publisher publisher) {
         this.number = number;
-        this.book = book;
+        this.books = books;
         this.publisher = publisher;
     }
 
@@ -47,11 +53,11 @@ public class Edition {
     }
 
     public Books getBook() {
-        return book;
+        return books;
     }
 
     public void setBook(Books book) {
-        this.book = book;
+        this.books = book;
     }
 
     public Publisher getPublisher() {
