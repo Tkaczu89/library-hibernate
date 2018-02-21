@@ -1,6 +1,6 @@
 package com.tkaczu.hibernate.library;
 
-import com.tkaczu.hibernate.library.libraryService.libraryService;
+import com.tkaczu.hibernate.library.libraryService.LibraryService;
 import com.tkaczu.hibernate.library.model.Book;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -9,10 +9,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+    private static LibraryService libraryService = new LibraryService();
+    private static Scanner sc = new Scanner(System.in);
+
     public static void main(String[] args) {
         try (SessionFactory factory = new Configuration().configure().buildSessionFactory()) {
-            libraryService libraryService = new libraryService();
-            Scanner sc = new Scanner(System.in);
             String input;
             do {
                 mainMenu();
@@ -26,45 +27,16 @@ public class Main {
                         do {
                             searchMenu();
                             input = sc.nextLine().toUpperCase();
-                            switch (input) {
-                                case "1":
-                                    libraryService.findBookByTitle(factory);
-                                    break;
-                                case "2":
-                                    libraryService.findBookByAuthor(factory);
-                                    break;
-                                case "3":
-                                    System.out.print("Give me a kind: ");
-                                    String kind = sc.nextLine().toUpperCase();
-                                    List<Book> booksByKind = libraryService.findBookByKind(factory, kind);
-                                    if (booksByKind.size() != 0) {
-                                        booksByKind.stream().forEach((books) -> libraryService.printBooks(factory));
-                                    } else {
-                                        System.out.println("We don't have any book that kind");
-                                        break;
-                                    }
-                                    break;
-                                case "B":
-                                    System.out.println("Going back!");
-                                    break;
-                                default:
-                                    System.out.println("Bad choice try again!");
-                                    break;
-                            }
+                            searchOptions(factory, input);
                         } while (!input.equalsIgnoreCase("b"));
                         break;
                     case "3":
                         do {
                             insertMenu();
                             input = sc.nextLine().toUpperCase();
-                            switch (input) {
-                                case "1":
-                                    libraryService.insertBook(factory);
-
-                            }
+                            insertOptions(factory, input);
                         } while (!input.equalsIgnoreCase("b"));
                         break;
-
                     case "Q":
                         System.out.println("See you later!");
                         break;
@@ -76,6 +48,42 @@ public class Main {
             } while (!input.equalsIgnoreCase("q"));
         }
     }
+
+    private static void insertOptions(SessionFactory factory, String input) {
+        switch (input) {
+            case "1":
+                libraryService.insertBook(factory);
+        }
+    }
+
+    private static void searchOptions(SessionFactory factory, String input) {
+        switch (input) {
+            case "1":
+                libraryService.findBookByTitle(factory);
+                break;
+            case "2":
+                libraryService.findBookByAuthor(factory);
+                break;
+            case "3":
+                System.out.print("Give me a kind: ");
+                String kind = sc.nextLine().toUpperCase();
+                List<Book> booksByKind = libraryService.findBookByKind(factory, kind);
+                if (booksByKind.size() != 0) {
+                    booksByKind.stream().forEach((books) -> libraryService.printBooks(factory));
+                } else {
+                    System.out.println("We don't have any book that kind");
+                    break;
+                }
+                break;
+            case "B":
+                System.out.println("Going back!");
+                break;
+            default:
+                System.out.println("Bad choice try again!");
+                break;
+        }
+    }
+
     private static void searchMenu() {
         System.out.println("Search options:");
         System.out.println("1 - Search books by title.");

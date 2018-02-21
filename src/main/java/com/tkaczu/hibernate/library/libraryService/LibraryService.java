@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
-public class libraryService {
+public class LibraryService {
 
     public void printBooks(SessionFactory factory) {
         System.out.println("List of all books in library:");
