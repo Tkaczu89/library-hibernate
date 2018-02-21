@@ -26,11 +26,11 @@ public class Author {
     private String nick;
 
     @ManyToMany
-    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @Cascade(value = org.hibernate.annotations.CascadeType.ALL)
     @JoinTable(name = "authors_books",
             joinColumns = {@JoinColumn(name = "author_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "book_id", nullable = false)})
-    private Set<Books> books = new HashSet<>();
+    private Set<Book> books = new HashSet<>();
 
     public Author() {
     }
@@ -73,14 +73,31 @@ public class Author {
         this.nick = nick;
     }
 
-    public Set<Books> getBooks() {
+    public Set<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(Set<Books> books) {
+    public void setBooks(Set<Book> books) {
         this.books = books;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Author author = (Author) o;
 
+        if (firstName != null ? !firstName.equals(author.firstName) : author.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(author.lastName) : author.lastName != null) return false;
+        return nick != null ? nick.equals(author.nick) : author.nick == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = firstName != null ? firstName.hashCode() : 0;
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (nick != null ? nick.hashCode() : 0);
+        return result;
+    }
 }

@@ -17,7 +17,7 @@ public class Kinds {
     private String kind;
 
     @ManyToMany(mappedBy = "kinds")
-    private Set<Books> books = new HashSet<>();
+    private Set<Book> books = new HashSet<>();
 
 
     public Kinds() {
@@ -43,11 +43,11 @@ public class Kinds {
         this.kind = kind;
     }
 
-    public Set<Books> getBooks() {
+    public Set<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(Set<Books> books) {
+    public void setBooks(Set<Book> books) {
         this.books = books;
     }
 

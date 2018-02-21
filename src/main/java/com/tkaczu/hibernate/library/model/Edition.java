@@ -20,7 +20,7 @@ public class Edition {
     @ManyToOne
     @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "book_id")
-    private Books books;
+    private Book book;
 
     @ManyToOne
     @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
@@ -30,9 +30,9 @@ public class Edition {
     public Edition() {
     }
 
-    public Edition(Integer number, Books books, Publisher publisher) {
+    public Edition(Integer number, Book book, Publisher publisher) {
         this.number = number;
-        this.books = books;
+        this.book = book;
         this.publisher = publisher;
     }
 
@@ -52,12 +52,12 @@ public class Edition {
         this.number = number;
     }
 
-    public Books getBook() {
-        return books;
+    public Book getBook() {
+        return book;
     }
 
-    public void setBook(Books book) {
-        this.books = book;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     public Publisher getPublisher() {

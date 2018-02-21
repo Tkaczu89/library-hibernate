@@ -33,7 +33,7 @@ public class TestInserting {
         kinds.add(drama);
         kinds.add(historical);
 
-        Books book = new Books("Quantum information and quantum computation", authors, kinds);
+        Book book = new Book("Quantum information and quantum computation", authors, kinds);
 
         Edition edition = new Edition(1, book, publisher);
 
